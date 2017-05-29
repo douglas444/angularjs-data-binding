@@ -1,60 +1,73 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="app">
+
     <head>
         <!-- AngularJS -->
         <script src="angular.min.js"></script>
         <script src="app.js"></script>
+
         <!-- Bootstrap -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     </head>
+
     <body ng-controller="mainController">
         <!--Form-->
         <div ng-repeat="question in form track by $index">
-            <!--Open question-->
-            <div ng-if="question.type == 0">
-                {{question.content.text}}<br/>
-                <div ng-init="answers[$index].questionId = question.id"></div>
-                <input type="text" ng-model="answers[$index].text">
-            </div>
-            <!--Multiple choice question-->
-            <div ng-if="question.type == 1">
-                {{question.content.text}}<br/>
-                <div ng-init="answers[$index].questionId = question.id"></div>
-                <form>
-                    <div ng-repeat="item in question.content.items track by $index">
-                        <input type="radio" name="item" ng-model="answers[$parent.$index].item" ng-value="'{{$index}}'">{{item}}
-                    </div>
-                </form>
-            </div>
-            <!--evaluation of items-->
-            <div ng-if="question.type == 2">
-                {{question.content.text}}<br/><br/>
-                <div ng-init="answers[$index].questionId = question.id"></div>
-                <div ng-repeat="item in question.content.items track by $index">
-                    {{item}}<br/>
-                    <label class="radio-inline">
-                    <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'1'">1
-                    </label>
-                    <label class="radio-inline">
-                    <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'2'">2
-                    </label>
-                    <label class="radio-inline">
-                    <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'3'">3
-                    </label>
-                    <label class="radio-inline">
-                    <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'4'">4
-                    </label>
-                    <label class="radio-inline">
-                    <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'5'">5
-                    </label>
-                    <br/><br/>
+            <div ng-switch="question.type">
+
+                <!--Open question-->
+                <div ng-switch-when="0">
+                    {{question.content.text}}<br/>
+                    <div ng-init="answers[$index].questionId = question.id"></div>
+                    <input type="text" ng-model="answers[$index].text">
+                    </br></br>
                 </div>
+
+                <!--Multiple choice question-->
+                <div ng-switch-when="1">
+                    {{question.content.text}}<br/>
+                    <div ng-init="answers[$index].questionId = question.id"></div>
+                    <form>
+                        <div ng-repeat="item in question.content.items track by $index">
+                            <input type="radio" name="item" ng-model="answers[$parent.$index].item" ng-value="'{{$index}}'">{{item}}
+                        </div>
+                    </form>
+                    </br>
+                </div>
+
+                <!--evaluation of items-->
+                <div ng-switch-when="2">
+                    {{question.content.text}}<br/>
+                    <div ng-init="answers[$index].questionId = question.id"></div>
+                    <div ng-repeat="item in question.content.items track by $index">
+                        [{{item}}]<br/>
+                        <label class="radio-inline">
+                        <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'1'">1
+                        </label>
+                        <label class="radio-inline">
+                        <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'2'">2
+                        </label>
+                        <label class="radio-inline">
+                        <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'3'">3
+                        </label>
+                        <label class="radio-inline">
+                        <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'4'">4
+                        </label>
+                        <label class="radio-inline">
+                        <input type="radio" name="{{$index}}" ng-model="answers[$parent.$index].items[$index].value" ng-value="'5'">5
+                        </label>
+                    </div>
+                </div>
+
+                <div ng-switch-default=></div>
+
             </div>
-            <br/><br/>
         </div>
         <!--/Form-->
+
+        <br/><br/>
         <button type="button" class="btn btn-primary" ng-click="sendForm()">Send</button>
     </body>
 </html>
